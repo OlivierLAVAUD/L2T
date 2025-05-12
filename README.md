@@ -40,7 +40,7 @@ L2T provides a rich command-line interface with various options for controlling 
 ### Command-Line Interface
 L2T provides a rich command-line interface with various options for controlling the translation process:
 
-<img src="img/image3.png" alt="Description de l'image" width="400" height="800" />
+<img src="img/image3.png" alt="Description de l'image" width="400" height="400" />
 
 The CLI supports the following operations:
 
@@ -55,7 +55,7 @@ The CLI supports the following operations:
 System Components Relationship
 The following diagram illustrates the relationships between the main classes in the L2T system:
 
-<img src="img/image5.png" alt="Description de l'image" width="400" height="800" />
+<img src="img/image5.png" alt="Description de l'image" width="400" height="600" />
 
 ## Dependencies
 
@@ -73,11 +73,8 @@ The system supports over 200 languages through the NLLB-200 model, using languag
 ## File Structure
 The codebase follows a clean, modular organization:
 
-<img src="img/image6.png" alt="Description de l'image" width="400" height="800" />
+<img src="img/image6.png" alt="Description de l'image" width="500" height="200" />
 
-
-
-# Structure
 ```markdown
 Directory structure:
 └── olivierlavaud-l2t/
