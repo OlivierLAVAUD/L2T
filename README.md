@@ -34,6 +34,12 @@ Directory structure:
         ├── gpu_verif.py
         └── gpu_version.py
 ```
+# Installation
+
+```bash
+git clone https://github.com/OlivierLAVAUD/L2T.git
+cd L2T
+```
 
 # Usage
 
