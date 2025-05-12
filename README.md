@@ -40,7 +40,7 @@ L2T provides a rich command-line interface with various options for controlling 
 ### Command-Line Interface
 L2T provides a rich command-line interface with various options for controlling the translation process:
 
-<img src="img/image3.png" alt="Description de l'image" width="300" height="300" />
+<img src="img/image3.png" alt="Description de l'image" width="300" height="250" />
 
 The CLI supports the following operations:
 
@@ -55,7 +55,7 @@ The CLI supports the following operations:
 System Components Relationship
 The following diagram illustrates the relationships between the main classes in the L2T system:
 
-<img src="img/image5.png" alt="Description de l'image" width="600" height="400" />
+<img src="img/image5.png" alt="Description de l'image" width="400" height="250" />
 
 ## Dependencies
 
@@ -73,7 +73,7 @@ The system supports over 200 languages through the NLLB-200 model, using languag
 ## File Structure
 The codebase follows a clean, modular organization:
 
-<img src="img/image6.png" alt="Description de l'image" width="500" height="200" />
+<img src="img/image6.png" alt="Description de l'image" width="400" height="200" />
 
 ```markdown
 Directory structure:
@@ -109,9 +109,25 @@ Directory structure:
 ```
 # Installation
 
+
+Step 1: Clone the Repository
 ```bash
 git clone https://github.com/OlivierLAVAUD/L2T.git
 cd L2T
+```
+
+Step 2: Verify Installation
+
+Run a simple command to verify that L2T is functioning correctly:
+```bash
+uv run -m app.main --list-languages
+
+This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
+```
+
+For more details see manual
+```bash
+uv run -m app.main --help
 ```
 
 # Example Usage
@@ -124,25 +140,26 @@ uv run  -m app.main --list-languages
 
 ## Samples
 
-```bash
-
 1. Translate a text string to French:
+```bash
 uv run -m app.main "Texte à traduire" -l fra_Latn
 ```
 
-```bash
 2. Translate a text string from French to English:
+```bash
+
 uv run -m app.main "Texte à traduire" -l eng_Latn -s fra_Latn
 ```
 
-```bash
 3. Translate a file and save the output:
+```bash
+
 uv run -m app.main "Texte à traduire" -l eng_Latn -s fra_Latn -o my_translated_file.txt
 ```
 
-```bash
 4. Translate a PDF document:
-# for Generating automatically a T2L file: my_file_to_translate.T2L.txt
+```bash
+# Generae automatically a T2L file: my_file_to_translate.T2L.txt
 uv run  -m app.main my_file_to_translate.txt -l eng_Latn -s fra_Latn
 
 uv run -m app.main docs/Le_Lievre_et_la_Tortue.txt -l eng_Latn -s fra_Latn
