@@ -55,7 +55,7 @@ The CLI supports the following operations:
 System Components Relationship
 The following diagram illustrates the relationships between the main classes in the L2T system:
 
-<img src="img/image5.png" alt="Description de l'image" width="400" height="600" />
+<img src="img/image5.png" alt="Description de l'image" width="800" height="600" />
 
 ## Dependencies
 
