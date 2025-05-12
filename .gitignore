@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+/app/archive
+/app/versions
+README Brouillon.md
+docs/Jean_de_la_fontaine.eng.txt
+docs/Le_Lievre_et_la_Tortue copy.txt
+docs/Le_Lievre_et_la_Tortue.eng.txt
+docs/Les_fables_de_Jean_de_La_Fontaine.pdf
+docs/Le_Lievre_et_la_Tortue.eng-Latn.T2L.txt
+translation_log.txt

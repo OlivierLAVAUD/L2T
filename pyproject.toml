@@ -1,0 +1,12 @@
+[project]
+name = "L2T"
+version = "0.1.0"
+description ="Language to Translate (L2T)"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "accelerate>=1.6.0",
+    "pypdf2>=3.0.1",
+    "torch>=2.7.0",
+    "transformers>=4.51.3",
+]
