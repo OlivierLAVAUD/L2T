@@ -80,8 +80,6 @@ Directory structure:
 └── olivierlavaud-l2t/
     ├── README.md
     ├── pyproject.toml
-    ├── requirements.txt
-    ├── uv.lock
     ├── .python-version
     ├── app/
     │   ├── README.md
@@ -92,16 +90,15 @@ Directory structure:
     │   ├── main.py
     │   ├── optimizations.py
     │   ├── translator.py
-    │   └── utils.py
-    │   
+    │   └── utils.py  
     ├── docs/
     └── gpu/
         
 ```
 # Installation
 
-
 Step 1: Clone the Repository
+
 ```bash
 git clone https://github.com/OlivierLAVAUD/L2T.git
 cd L2T
