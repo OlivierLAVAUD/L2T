@@ -92,20 +92,11 @@ Directory structure:
     │   ├── main.py
     │   ├── optimizations.py
     │   ├── translator.py
-    │   ├── utils.py
-    │   └── minimal/
-    │       ├── README.md
-    │       ├── cli-nllb.py
-    │       ├── nllb copy 2.py
-    │       └── test-nllb.py
+    │   └── utils.py
+    │   
     ├── docs/
-    │   ├── Le_Lievre_et_la_Tortue.txt
-    │   └── Le_Petit_Prince_ASE.eng-Latn.T2L.txt
     └── gpu/
-        ├── gpu_check.py
-        ├── gpu_sync.py
-        ├── gpu_verif.py
-        └── gpu_version.py
+        
 ```
 # Installation
 
@@ -134,7 +125,7 @@ uv run -m app.main --help
 
 1. Translate a text string to French:
 ```bash
-uv run -m app.main "Texte à traduire" -l fra_Latn
+uv run -m app.main "Text to translate" -l fra_Latn
 ```
 
 2. Translate a text string from French to English:
