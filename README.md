@@ -40,7 +40,7 @@ L2T provides a rich command-line interface with various options for controlling 
 ### Command-Line Interface
 L2T provides a rich command-line interface with various options for controlling the translation process:
 
-<img src="img/image3.png" alt="Description de l'image" width="400" height="400" />
+<img src="img/image3.png" alt="Description de l'image" width="300" height="300" />
 
 The CLI supports the following operations:
 
@@ -55,7 +55,7 @@ The CLI supports the following operations:
 System Components Relationship
 The following diagram illustrates the relationships between the main classes in the L2T system:
 
-<img src="img/image5.png" alt="Description de l'image" width="800" height="600" />
+<img src="img/image5.png" alt="Description de l'image" width="600" height="400" />
 
 ## Dependencies
 
@@ -128,13 +128,19 @@ uv run  -m app.main --list-languages
 
 1. Translate a text string to French:
 uv run -m app.main "Texte à traduire" -l fra_Latn
+```
 
+```bash
 2. Translate a text string from French to English:
 uv run -m app.main "Texte à traduire" -l eng_Latn -s fra_Latn
+```
 
+```bash
 3. Translate a file and save the output:
 uv run -m app.main "Texte à traduire" -l eng_Latn -s fra_Latn -o my_translated_file.txt
+```
 
+```bash
 4. Translate a PDF document:
 # for Generating automatically a T2L file: my_file_to_translate.T2L.txt
 uv run  -m app.main my_file_to_translate.txt -l eng_Latn -s fra_Latn
