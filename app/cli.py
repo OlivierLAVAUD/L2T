@@ -10,7 +10,6 @@ from .translator import NLLBTranslator
 from .file_handlers import FileHandler
 from .utils import ProgressHandler, TextProcessor
 
-
 class TranslationCLI:
     """Interface CLI optimisée pour la traduction NLLB-200"""
 
@@ -31,7 +30,7 @@ class TranslationCLI:
         parser.add_argument('input', nargs='?', help="Texte ou fichier à traduire (.txt/.pdf)")
 
         # Options de langue
-        parser.add_argument('-l', '--lang', required=True, help="Code langue cible (ex: fra_Latn)")
+        parser.add_argument('-l', '--lang', help="Code langue cible (ex: fra_Latn)")
         parser.add_argument('-s', '--source-lang', help="Code langue source")
         parser.add_argument('--list-languages', action='store_true', help="Affiche les langues supportées")
 
@@ -69,7 +68,7 @@ class TranslationCLI:
         """Valide les arguments"""
         if not self.args.input:
             raise ValueError("Aucun texte ou fichier spécifié")
-        
+
         if not self.translator.is_language_supported(self.args.lang):
             raise ValueError(f"Langue cible non supportée: {self.args.lang}")
 
@@ -83,10 +82,10 @@ class TranslationCLI:
     def _load_content(self) -> str:
         """Charge le contenu à traduire"""
         input_path = Path(self.args.input)
-        
+
         if not input_path.exists() and len(self.args.input) < 1000:
             return self.args.input
-            
+
         try:
             if input_path.is_file():
                 return FileHandler.read_file(input_path, self.args.encoding)
@@ -94,7 +93,6 @@ class TranslationCLI:
         except Exception as e:
             raise IOError(f"Erreur lecture: {str(e)}")
 
-    
     def _translate_content(self, content: str) -> str:
         """Gère la traduction avec optimisations et progression"""
         if not content.strip():
@@ -118,15 +116,13 @@ class TranslationCLI:
             self.logger.error(f"Échec traduction segmentée: {str(e)}")
             raise
 
-
-
     def _translate_in_chunks(self, content: str) -> str:
         # Traduction par segments avec progression visuelle
         paragraphs = TextProcessor.split_paragraphs(content)
         total = len(paragraphs)
         results = []
         start_time = time.time()
-        
+
         print(f"\nTraduction de {total} segments:")
         ProgressHandler.display_progress(0, total, start_time)
 
@@ -134,7 +130,7 @@ class TranslationCLI:
             if not para.strip():
                 results.append("")
                 continue
-                
+
             try:
                 # Traduction du segment
                 translated = self.translator.translate(para, self.args.lang, self.args.source_lang)
@@ -146,16 +142,15 @@ class TranslationCLI:
             # Mise à jour de la progression (optimisée pour performance)
             if i % max(1, total//100) == 0 or i == total:  # 100 updates max
                 ProgressHandler.display_progress(i, total, start_time)
-        
+
         print()  # Retour à la ligne final
         return "\n".join(results)
-
 
     def _handle_output(self, translated_text: str) -> None:
         """Gère la sortie avec génération automatique du nom de fichier"""
         input_path = Path(self.args.input)
         output_path = self._generate_output_path(input_path)
-        
+
         if output_path:
             try:
                 FileHandler.write_output(translated_text, output_path, self.args.encoding)
