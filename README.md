@@ -2,14 +2,37 @@
 
 # Structure
 ```markdown
-app/
-│
-├── __init__.py
-├── cli.py            # Point d'entrée et gestion des arguments
-├── translator.py     # Coeur de la traduction
-├── file_handlers.py  # Gestion des fichiers PDF/text
-├── utils.py         # Fonctions utilitaires
-└── logger.py        # Configuration du logging
+Directory structure:
+└── olivierlavaud-l2t/
+    ├── README.md
+    ├── pyproject.toml
+    ├── requirements.txt
+    ├── uv.lock
+    ├── .python-version
+    ├── app/
+    │   ├── README.md
+    │   ├── __init__.py
+    │   ├── cli.py
+    │   ├── file_handlers.py
+    │   ├── logger.py
+    │   ├── main.py
+    │   ├── optimizations.py
+    │   ├── pyproject.toml
+    │   ├── translator.py
+    │   ├── utils.py
+    │   └── minimal/
+    │       ├── README.md
+    │       ├── cli-nllb.py
+    │       ├── nllb copy 2.py
+    │       └── test-nllb.py
+    ├── docs/
+    │   ├── Le_Lievre_et_la_Tortue.txt
+    │   └── Le_Petit_Prince_ASE.eng-Latn.T2L.txt
+    └── gpu/
+        ├── gpu_check.py
+        ├── gpu_sync.py
+        ├── gpu_verif.py
+        └── gpu_version.py
 ```
 
 # Usage
