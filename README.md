@@ -130,15 +130,7 @@ For more details see manual
 uv run -m app.main --help
 ```
 
-# Example Usage
-
-- Help command line and language List
-```bash
-uv run -m app.main --help
-uv run  -m app.main --list-languages
-```
-
-## Samples
+# Usage
 
 1. Translate a text string to French:
 ```bash
@@ -159,7 +151,7 @@ uv run -m app.main "Texte à traduire" -l eng_Latn -s fra_Latn -o my_translated_
 
 4. Translate a PDF document:
 ```bash
-# Generae automatically a T2L file: my_file_to_translate.T2L.txt
+# Generate automatically a T2L file: my_file_to_translate.T2L.txt
 uv run  -m app.main my_file_to_translate.txt -l eng_Latn -s fra_Latn
 
 uv run -m app.main docs/Le_Lievre_et_la_Tortue.txt -l eng_Latn -s fra_Latn
