@@ -16,29 +16,39 @@ The system supports over 200 languages through the NLLB-200 model, using languag
 The codebase follows a clean, modular organization:
 
 ```mermaid
-flowchart TD
-    direction TB
+flowchart LR
+    %% Direction FLux
+    direction LR
 
-    root(["📁 Github:/OlivierLAVAUD/L2T"]):::folder
-    root --- F1["📄 README.md"]
-    root --- F2["⚙️ pyproject.toml"]
-    root --- F3["🐍 .python-version"]
-    
-    root --- app(["📂 app"]):::folder
-    app --- A1["🐍 __init__.py"]
-    app --- A2["💻 cli.py"]
-    app --- A3["📁 file_handlers.py"]
-    app--- A4["📝 logger.py"]
-    app --- A5["⚡ main.py"]
-    app --- A6["🚀 optimizations.py"]
-    app --- A7["🌐 translator.py"]
-    app --- A8["🛠️ utils.py"]
-    
-    app --- docs(["📚 docs"]):::folder
-    app --- gpu(["🎮 gpu"]):::folder
+    %% Styles
+    classDef folder fill:#f0f7ff,stroke:#0366d6,stroke-width:2px
+    classDef file fill:#fff,stroke:#333,stroke-width:1.5px
 
-    classDef folder fill:#f0f7ff,stroke:#0366d6
-    class root,app,docs,gpu folder
+    %% Structure racine
+    root(["📁 L2T"]):::folder
+
+    %% Fichiers racine
+    root --> F1["📄 README.md"]
+    root --> F2["⚙️ pyproject.toml"]
+    root --> F3["🐍 .python-version"]
+
+    %% Dossier app et son contenu
+    root --> app(["📂 app"]):::folder
+    app --> A1["🐍 __init__.py"]
+    app --> A2["💻 cli.py"]
+    app --> A3["📕 file_handlers.py"]
+    app --> A4["📝 logger.py"]
+    app --> A5["⚡ main.py"]
+    app --> A6["🚀 optimizations.py"]
+    app --> A7["🌐 translator.py"]
+    app --> A8["🛠️ utils.py"]
+
+    %% Sous-dossiers
+    app --> docs(["📚 docs"]):::folder
+    app --> gpu(["🎮 gpu"]):::folder
+
+    %% Style des liens
+    linkStyle default stroke:#999,stroke-width:1px
 ```
 
 # Infrastructure Diagram
