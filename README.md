@@ -59,11 +59,6 @@ l2t --list
 This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
 ```
 
-For more details see manual
-```bash
-uv run -m app.main --help
-```
-
 ### Step 3:  Create an Alias
 
 #### For PowerShell (Windows)
@@ -144,6 +139,10 @@ l2t <my_pdf_or_txt_file_to_translate> -l eng_Latn -s fra_Latn
 # Others samples
 l2t docs/Le_Lievre_et_la_Tortue.txt -l eng_Latn -s fra_Latn
 l2t docs/Le_Petit_Prince_ASE.pdf -l eng_Latn -s fra_Latn
+```
+5. For more details see manual
+```bash
+l2t --help
 ```
 
 # Technical Documentation
