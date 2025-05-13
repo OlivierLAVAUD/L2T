@@ -19,7 +19,7 @@ The codebase follows a clean, modular organization:
 flowchart LR
     %% Direction FLux
     direction LR
-
+    
     %% Styles
     classDef folder fill:#f0f7ff,stroke:#0366d6,stroke-width:2px
     classDef file fill:#fff,stroke:#333,stroke-width:1.5px
