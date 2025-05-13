@@ -47,8 +47,6 @@ flowchart TD
     classDef markdown fill:#F3E5F5,stroke:#AB47BC
 ```
 
-```markdown
-
 # Prerequisite
     . uv: The extremely fast Python package and project manager (https://docs.astral.sh/uv/getting-started/installation/)
     . Hugginface CLI Access
