@@ -147,6 +147,6 @@ l2t --help
 
 # Documentation
 
-![[https://deepwiki.com/OlivierLAVAUD/L2T](https://deepwiki.com/OlivierLAVAUD/L2T)]
+[https://deepwiki.com/OlivierLAVAUD/L2T](https://deepwiki.com/OlivierLAVAUD/L2T)
 
  
