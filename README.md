@@ -147,7 +147,8 @@ l2t --help
 
 # Technical Diagram
 
-```flowchart TD
+```mermaid
+    flowchart TD
     %% Layers and Components
     subgraph "CLI Layer"
         CLI["CLI Layer<br/>(cli.py)"]:::io
