@@ -37,22 +37,24 @@ Directory structure:
 ```
 # Prerequisite
     . uv: The extremely fast Python package and project manager (https://docs.astral.sh/uv/getting-started/installation/)
-    . Hugginface Cli Access
+    . Hugginface CLI Access
 
 # Installation
 
-Step 1: Clone the Repository
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/OlivierLAVAUD/L2T.git
 cd L2T
 ```
 
-Step 2: Verify Installation
+### Step 2: Verify Installation
 
 Run a simple command to verify that L2T is functioning correctly:
 ```bash
 uv run -m app.main --list-languages
+# or with alias
+l2t --list
 
 This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
 ```
@@ -62,31 +64,87 @@ For more details see manual
 uv run -m app.main --help
 ```
 
+### Step 3:  Create an Alias
+
+#### For PowerShell (Windows)
+
+1. Open your PowerShell profile:
+    ```powershell
+    notepad $PROFILE
+    ```
+2. Add the function + alias:
+```powershell
+
+function l2t {
+    param(
+        [string]$Text,
+        [string]$Language = "fra_Latn"  # Default: French
+    )
+    uv run -m app.main $Text -l $Language
+}
+Set-Alias -Name lt -Value l2t  # Short alias
+```
+.. or more simply, do it simply with the provided powershell script
+```powershell
+.\l2t-alias.ps1
+```
+
+3. Reload the profile:
+```powershell
+     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # for unblocking the security policy (only if needed in the case of current user session)
+     
+     . $PROFILE
+
+```
+
+#### For Unix (Linux/macOS)
+
+1. Open your shell config file (~/.bashrc, ~/.zshrc, etc.):
+    ```bash
+       nano ~/.bashrc
+    ```
+
+2. Add the function + alias:
+```bash
+
+l2t() {
+    local text="$1"
+    local lang="${2:-fra_Latn}"  # Default: French
+    uv run -m app.main "$text" -l "$lang"
+}
+alias lt="l2t"  # Short alias (optional)
+```
+
+3. Reload the config:
+```bash
+    source ~/.bashrc
+```
+
 # Usage
 
 1. Translate a text string to French:
 ```bash
-uv run -m app.main "Text to translate" -l fra_Latn
+l2t "Text to translate" -l fra_Latn
 ```
 
 2. Translate a text string from French to English and specifying source language:
 ```bash
-
-uv run -m app.main "Texte à traduire" -l eng_Latn -s fra_Latn
+l2t "Texte à traduire" -l eng_Latn -s fra_Latn
 ```
 
-3. Translate a file and save the output:
+3. Translate a file and save the output on a specific name:
 ```bash
-
-uv run -m app.main "Texte à traduire" -l eng_Latn -s fra_Latn -o my_translated_file.txt
+l2t "Texte à traduire" -l eng_Latn -s fra_Latn -o my_translated_file.txt
 ```
 
-4. Translate a PDF document:
+4. Translate a PDF ou TXT document from CLI with a automatic filename extension (T2L.txt) recording:
 ```bash
-# Generate automatically a T2L file: my_file_to_translate.T2L.txt
-uv run  -m app.main my_file_to_translate.txt -l eng_Latn -s fra_Latn
+l2t <my_pdf_or_txt_file_to_translate> -l eng_Latn -s fra_Latn
 
 # Others samples
-uv run -m app.main docs/Le_Lievre_et_la_Tortue.txt -l eng_Latn -s fra_Latn
-uv run -m app.main docs/Le_Petit_Prince_ASE.pdf -l eng_Latn -s fra_Latn
+l2t docs/Le_Lievre_et_la_Tortue.txt -l eng_Latn -s fra_Latn
+l2t docs/Le_Petit_Prince_ASE.pdf -l eng_Latn -s fra_Latn
 ```
+
+# Technical Documentation
+(https://deepwiki.com/OlivierLAVAUD/L2T)
