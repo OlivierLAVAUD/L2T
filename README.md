@@ -147,6 +147,6 @@ l2t --help
 
 # Technical Documentation
 
-[![DeepWiki Documentation](img/DeepWiki.svg)](https://deepwiki.com/OlivierLAVAUD/L2T)
+[![https://deepwiki.com/OlivierLAVAUD/L2T](img/DeepWiki.svg)](https://deepwiki.com/OlivierLAVAUD/L2T)
 
  
