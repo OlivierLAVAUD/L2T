@@ -16,25 +16,39 @@ The system supports over 200 languages through the NLLB-200 model, using languag
 The codebase follows a clean, modular organization:
 
 ```markdown
-Directory structure:
-└── olivierlavaud-l2t/
-    ├── README.md
-    ├── pyproject.toml
-    ├── .python-version
-    ├── app/
-    │   ├── README.md
-    │   ├── __init__.py
-    │   ├── cli.py
-    │   ├── file_handlers.py
-    │   ├── logger.py
-    │   ├── main.py
-    │   ├── optimizations.py
-    │   ├── translator.py
-    │   └── utils.py  
-    ├── docs/
-    └── gpu/
-        
+```mermaid
+flowchart TD
+    root["olivierlavaud-l2t/"]:::folder
+    root --> README["README.md"]:::markdown
+    root --> pyproject["pyproject.toml"]:::config
+    root --> python_version[".python-version"]:::config
+    
+    subgraph app["app/"]:::folder
+        direction TB
+        app_readme["README.md"]:::markdown
+        app_init["__init__.py"]:::python
+        cli["cli.py"]:::python
+        file_handlers["file_handlers.py"]:::python
+        logger["logger.py"]:::python
+        main["main.py"]:::python
+        optimizations["optimizations.py"]:::python
+        translator["translator.py"]:::python
+        utils["utils.py"]:::python
+    end
+    
+    root --> app
+    root --> docs["docs/"]:::folder
+    root --> gpu["gpu/"]:::folder
+
+    classDef folder fill:#E3F2FD,stroke:#42A5F5
+    classDef file fill:#E8F5E9,stroke:#66BB6A
+    classDef config fill:#FFF3E0,stroke:#FFA726
+    classDef python fill:#E1F5FE,stroke:#0288D1
+    classDef markdown fill:#F3E5F5,stroke:#AB47BC
 ```
+
+```markdown
+
 # Prerequisite
     . uv: The extremely fast Python package and project manager (https://docs.astral.sh/uv/getting-started/installation/)
     . Hugginface CLI Access
