@@ -145,7 +145,7 @@ l2t docs/Le_Petit_Prince_ASE.pdf -l eng_Latn -s fra_Latn
 l2t --help
 ```
 
-# Technical Diagram
+# Infrastructure
 
 ```mermaid
     flowchart TD
