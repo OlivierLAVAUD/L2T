@@ -147,7 +147,6 @@ l2t --help
 
 # Documentation
 
-[![https://deepwiki.com/OlivierLAVAUD/L2T](img/Devin.svg)](https://deepwiki.com/OlivierLAVAUD/L2T)
+[![https://deepwiki.com/OlivierLAVAUD/L2T](img/Devin.png)](https://deepwiki.com/OlivierLAVAUD/L2T)
 
  
-<img src="img/L2T_img.png" alt="Description de l'image" />
