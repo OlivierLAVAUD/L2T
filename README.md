@@ -15,36 +15,43 @@ The system supports over 200 languages through the NLLB-200 model, using languag
 # File Structure
 The codebase follows a clean, modular organization:
 
-```markdown
+
 ```mermaid
 flowchart TD
-    root["olivierlavaud-l2t/"]:::folder
-    root --> README["README.md"]:::markdown
-    root --> pyproject["pyproject.toml"]:::config
-    root --> python_version[".python-version"]:::config
-    
-    subgraph app["app/"]:::folder
-        direction TB
-        app_readme["README.md"]:::markdown
-        app_init["__init__.py"]:::python
-        cli["cli.py"]:::python
-        file_handlers["file_handlers.py"]:::python
-        logger["logger.py"]:::python
-        main["main.py"]:::python
-        optimizations["optimizations.py"]:::python
-        translator["translator.py"]:::python
-        utils["utils.py"]:::python
-    end
-    
-    root --> app
-    root --> docs["docs/"]:::folder
-    root --> gpu["gpu/"]:::folder
-
-    classDef folder fill:#E3F2FD,stroke:#42A5F5
-    classDef file fill:#E8F5E9,stroke:#66BB6A
+    %% Configuration globale
+    classDef folder fill:#E3F2FD,stroke:#42A5F5,stroke-width:2px
+    classDef file fill:#E8F5E9,stroke:#66BB6A,stroke-width:1.5px
     classDef config fill:#FFF3E0,stroke:#FFA726
     classDef python fill:#E1F5FE,stroke:#0288D1
     classDef markdown fill:#F3E5F5,stroke:#AB47BC
+
+    %% Structure racine
+    root["📦 olivierlavaud-l2t/"]
+    root:::folder --> README["📄 README.md"]
+    README:::markdown
+    root --> pyproject["⚙️ pyproject.toml"]
+    pyproject:::config
+    root --> python_version["🐍 .python-version"]
+    python_version:::config
+
+    %% Sous-dossier app
+    subgraph app["📂 app/"]
+        direction TB
+        app_readme["📄 README.md"]:::markdown
+        app_init["__init__.py"]:::python
+        cli["🖥️ cli.py"]:::python
+        file_handlers["📂 file_handlers.py"]:::python
+        logger["📝 logger.py"]:::python
+        main["⚡ main.py"]:::python
+        optimizations["🚀 optimizations.py"]:::python
+        translator["🌐 translator.py"]:::python
+        utils["🛠️ utils.py"]:::python
+    end
+    app:::folder
+
+    %% Autres dossiers
+    root --> docs["📚 docs/"]:::folder
+    root --> gpu["🎮 gpu/"]:::folder
 ```
 
 # Prerequisite
