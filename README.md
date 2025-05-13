@@ -145,6 +145,86 @@ l2t docs/Le_Petit_Prince_ASE.pdf -l eng_Latn -s fra_Latn
 l2t --help
 ```
 
+# Technical Diagram
+
+```flowchart TD
+    %% Layers and Components
+    subgraph "CLI Layer"
+        CLI["CLI Layer<br/>(cli.py)"]:::io
+    end
+
+    subgraph "Core Modules"
+        ORCH["Orchestrator<br/>(main.py)"]:::core
+        TR["Translator<br/>(translator.py)"]:::core
+    end
+
+    subgraph "I/O Subsystem"
+        FH["File Handlers<br/>(file_handlers.py)"]:::io
+    end
+
+    subgraph "Performance & GPU"
+        OPT["Optimizations<br/>(optimizations.py)"]:::perf
+        GPU["GPU Helpers<br/>(gpu/)"]:::perf
+    end
+
+    subgraph "Utilities"
+        LOG["Logger<br/>(logger.py)"]:::util
+        UTIL["Utils<br/>(utils.py)"]:::util
+    end
+
+    subgraph "Demo & Test"
+        MIN["Minimal Scripts<br/>(app/minimal/)"]:::demo
+    end
+
+    subgraph "External Dependencies"
+        HF["HuggingFace Model Hub"]:::external
+        PT["PyTorch/Transformers"]:::external
+        UV["UV Runner"]:::external
+    end
+
+    subgraph "Model Cache"
+        Cache[(Model Cache)]:::storage
+    end
+
+    %% Flow
+    UV -->|"invokes"| CLI
+    CLI -->|"parses args"| ORCH
+    CLI -->|"runs demos"| MIN
+    ORCH -->|"validate languages"| UTIL
+    ORCH -->|"log operations"| LOG
+    ORCH -->|"read input"| FH
+    FH -->|"file content"| ORCH
+    ORCH -->|"invoke translation"| TR
+    TR -->|"apply batching"| OPT
+    OPT -->|"optimized inputs"| TR
+    TR -->|"load/cache model"| Cache
+    TR -->|"fetch model"| HF
+    TR -->|"use frameworks"| PT
+    TR -->|"translation result"| ORCH
+    ORCH -->|"write output"| FH
+    GPU -.->|"optional pre-check"| ORCH
+
+    %% Click Events
+    click CLI "https://github.com/olivierlavaud/l2t/blob/master/app/cli.py"
+    click ORCH "https://github.com/olivierlavaud/l2t/blob/master/app/main.py"
+    click FH "https://github.com/olivierlavaud/l2t/blob/master/app/file_handlers.py"
+    click TR "https://github.com/olivierlavaud/l2t/blob/master/app/translator.py"
+    click OPT "https://github.com/olivierlavaud/l2t/blob/master/app/optimizations.py"
+    click LOG "https://github.com/olivierlavaud/l2t/blob/master/app/logger.py"
+    click UTIL "https://github.com/olivierlavaud/l2t/blob/master/app/utils.py"
+    click GPU "https://github.com/olivierlavaud/l2t/tree/master/gpu/"
+    click MIN "https://github.com/olivierlavaud/l2t/tree/master/app/minimal/"
+
+    %% Styles
+    classDef core fill:#b2f2bb,stroke:#239a3b,color:#000
+    classDef io fill:#bae7ff,stroke:#1890ff,color:#000
+    classDef perf fill:#ffd8a8,stroke:#fa8c16,color:#000
+    classDef util fill:#d9d9d9,stroke:#595959,color:#000
+    classDef external fill:#efdbff,stroke:#9254de,color:#000
+    classDef storage fill:#ffc069,stroke:#d46b08,color:#000
+    classDef demo fill:#e6fffb,stroke:#13c2c2,color:#000
+```
+
 # Documentation
 
 [https://deepwiki.com/OlivierLAVAUD/L2T](https://deepwiki.com/OlivierLAVAUD/L2T)
