@@ -145,5 +145,9 @@ l2t docs/Le_Petit_Prince_ASE.pdf -l eng_Latn -s fra_Latn
 l2t --help
 ```
 
-# Technical Documentation
-(https://deepwiki.com/OlivierLAVAUD/L2T)
+# Documentation
+
+<a href="https://deepwiki.com/OlivierLAVAUD/L2T" width="100" height="20"> 
+  <img src="img/Deepwiki.png" alt="L2T DeepWiki Documentation" /> 
+</a>
+
