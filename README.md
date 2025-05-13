@@ -147,7 +147,7 @@ l2t --help
 
 # Documentation
 
-<a href="https://deepwiki.com/OlivierLAVAUD/L2T" width="100" height="20"> 
+<a href="https://deepwiki.com/OlivierLAVAUD/L2T" width="50" height="10"> 
   <img src="img/Deepwiki.png" alt="L2T DeepWiki Documentation" /> 
 </a>
 
