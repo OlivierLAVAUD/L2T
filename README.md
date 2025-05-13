@@ -176,7 +176,7 @@ function l2t {
 }
 Set-Alias -Name lt -Value l2t  # Short alias
 ```
-.. or more simply, do it simply with the provided powershell script
+.. or more simply, execute the provided powershell script
 ```powershell
 .\l2t-alias.ps1
 ```
