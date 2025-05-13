@@ -20,3 +20,5 @@ translation_log.txt
 app/cli copy.py
 l2t-code.txt
 $PROFILE.txt
+-README copy.md
+app/minimal/nllb copy 2-.py
