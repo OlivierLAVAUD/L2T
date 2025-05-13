@@ -18,40 +18,24 @@ The codebase follows a clean, modular organization:
 
 ```mermaid
 flowchart TD
-    %% Configuration globale
-    classDef folder fill:#E3F2FD,stroke:#42A5F5,stroke-width:2px
-    classDef file fill:#E8F5E9,stroke:#66BB6A,stroke-width:1.5px
-    classDef config fill:#FFF3E0,stroke:#FFA726
-    classDef python fill:#E1F5FE,stroke:#0288D1
-    classDef markdown fill:#F3E5F5,stroke:#AB47BC
-
-    %% Structure racine
-    root["📦 olivierlavaud-l2t/"]
-    root:::folder --> README["📄 README.md"]
-    README:::markdown
-    root --> pyproject["⚙️ pyproject.toml"]
-    pyproject:::config
-    root --> python_version["🐍 .python-version"]
-    python_version:::config
-
-    %% Sous-dossier app
-    subgraph app["📂 app/"]
-        direction TB
-        app_readme["📄 README.md"]:::markdown
-        app_init["__init__.py"]:::python
-        cli["🖥️ cli.py"]:::python
-        file_handlers["📂 file_handlers.py"]:::python
-        logger["📝 logger.py"]:::python
-        main["⚡ main.py"]:::python
-        optimizations["🚀 optimizations.py"]:::python
-        translator["🌐 translator.py"]:::python
-        utils["🛠️ utils.py"]:::python
-    end
-    app:::folder
-
-    %% Autres dossiers
-    root --> docs["📚 docs/"]:::folder
-    root --> gpu["🎮 gpu/"]:::folder
+    direction TB
+    
+    root["olivierlavaud-l2t/"] --> README["README.md"]
+    root --> pyproject["pyproject.toml"]
+    root --> python_version[".python-version"]
+    
+    root --> app["app/"]
+    app --> app_readme["README.md"]
+    app --> cli["cli.py"]
+    app --> main["main.py"]
+    app --> translator["translator.py"]
+    
+    root --> docs["docs/"]
+    root --> gpu["gpu/"]
+    
+    %% Tous les noeuds alignés à gauche
+    class allNodes text-align:left
+    classDef allNodes text-align:left
 ```
 
 # Prerequisite
