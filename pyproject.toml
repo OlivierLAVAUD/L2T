@@ -1,12 +1,32 @@
 [project]
-name = "L2T"
-version = "2.0.0"
-description ="Language to Translate (L2T)"
+name = "l2t"
+version = "2.1.0"
+description = "Outil de traduction NLLB optimisé"
+authors = [{name = "Olivier Lavaud"}]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
-    "accelerate>=1.6.0",
-    "pypdf2>=3.0.1",
-    "torch>=2.7.0",
-    "transformers>=4.51.3",
+    "torch>=2.0.0",
+    "transformers>=4.30.0",
+    "pydantic>=2.0.0",
+    "aiofiles>=23.0.0",
+    "PyPDF2>=3.0.0",
+    "python-dotenv>=1.0.0",
+    "pydantic-settings>=2.8.1",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "mypy>=1.0",
+    "black>=23.0"
+]
+gpu = ["pynvml>=11.0"]
+
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.packages.find]
+include = ["app"]

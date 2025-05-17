@@ -22,3 +22,9 @@ l2t-code.txt
 $PROFILE.txt
 -README copy.md
 app/minimal/nllb copy 2-.py
+/app/infrastructure/gpu/check_config/models
+/docs
+/models
+hello girls my girls.translated.txt
+logs/translation.log
+/app/infrastructure/gpu/check_config/logs

@@ -3,7 +3,7 @@ function Invoke-L2T {
         [string]$Text,
         [string]$Language = "fra_Latn"  # Valeur par défaut
     )
-    uv run -m app.main $Text -l $Language
+    uv run -m app.interfaces.main $Text -t $Language
 }
 
 # Associer l'alias à la fonction

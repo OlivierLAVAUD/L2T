@@ -14,6 +14,63 @@ The system supports over 200 languages through the NLLB-200 model, using languag
 
 # File Structure
 The codebase follows a clean, modular organization:
+olivierlavaud-l2t/
+├── .env.example               # Template de configuration
+├── .gitignore
+├── pyproject.toml             # Configuration du projet
+├── README.md                  # Documentation principale
+├── l2t-alias.ps1              # Script d'alias PowerShell
+├── requirements.txt           # Dépendances (optionnel)
+│
+├── app/                       # Code source principal
+│   ├── __init__.py
+│   ├── config.py              # Configuration centralisée
+│   │
+│   ├── core/                  # Logique métier
+│   │   ├── __init__.py
+│   │   ├── translator.py      # Moteur de traduction
+│   │   ├── commands.py        # Commandes CLI
+│   │   └── models.py          # Modèles de données
+│   │
+│   ├── infrastructure/        # Couche infrastructure
+│   │   ├── __init__.py
+│   │   ├── file_handlers.py   # Gestion des fichiers
+│   │   └── gpu/               # Optimisations GPU
+│   │       ├── __init__.py
+│   │       ├── manager.py
+│   │       └── optimizations.py
+│   │
+│   ├── interfaces/            # Interfaces utilisateur
+│   │   ├── __init__.py
+│   │   ├── cli.py            # Interface ligne de commande
+│   │   └── main.py           # Point d'entrée
+│   │
+│   └── utils/                 # Utilitaires
+│       ├── __init__.py
+│       ├── logger.py          # Gestion des logs
+│       └── progress.py        # Barres de progression
+│
+├── docs/                      # Documentation
+│   ├── examples/              # Exemples d'utilisation
+│   └── technical.md           # Documentation technique
+│
+├── tests/                     # Tests automatisés
+│   ├── unit/
+│   │   ├── test_translator.py
+│   │   └── test_file_handlers.py
+│   └── integration/
+│       └── test_cli.py
+│
+├── scripts/                   # Scripts utilitaires
+│   ├── install_gpu.sh         # Installation GPU
+│   └── benchmark.py           # Tests de performance
+│
+└── resources/                 # Ressources externes
+    ├── models/                # Modèles téléchargés
+    └── languages/             # Fichiers de langue
+
+
+
 
 ```mermaid
 flowchart LR
@@ -156,7 +213,11 @@ l2t --list
 This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
 ```
 
-### Step 3:  Create an Alias
+### Step 3: Install the GPU package of you cGraphic Card ex ( NVIDIA Cuda cu118)
+
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+### Step 4:  Create an Alias
 
 #### For PowerShell (Windows)
 
@@ -172,9 +233,9 @@ function l2t {
         [string]$Text,
         [string]$Language = "fra_Latn"  # Default: French
     )
-    uv run -m app.main $Text -l $Language
+    uv run -m app.main $Text -t $Language
 }
-Set-Alias -Name lt -Value l2t  # Short alias
+Set-Alias -Name l2t -Value l2t  # Short alias
 ```
 .. or more simply, execute the provided powershell script
 ```powershell
