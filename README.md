@@ -133,8 +133,8 @@ flowchart LR
 ```
 
 # Prerequisite
-    . uv: The extremely fast Python package and project manager (https://docs.astral.sh/uv/getting-started/installation/)
-    . Hugginface CLI Access
+    - uv: The extremely fast Python package and project manager (https://docs.astral.sh/uv/getting-started/installation/)
+    - Hugginface CLI Access
 
 # Installation
 
@@ -156,7 +156,7 @@ l2t --list
 This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
 ```
 
-### Step 3 (Optional):  CInstall the packages for Cuda (ex for cu118)
+### Step 3 (Optional):  Install the packages for Cuda (ex for cu118)
 ```
     # check your gpu
     uv run gpu/gpu_version.py
