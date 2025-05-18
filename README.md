@@ -157,7 +157,8 @@ Run a simple command to verify that L2T is functioning correctly:
 ### Step 3 (Optional):  Install the packages for Cuda (ex for cu118)
     ```bash
         # check your gpu
-        uv run gpu/gpu_version.py
+        uv run gpu/gpu_check.py
+
         # Install the right depedencies of Pytorch (ex cu118 for example)
         uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
     ```
@@ -166,29 +167,14 @@ Run a simple command to verify that L2T is functioning correctly:
 
 #### For PowerShell (Windows)
 
-1. Open your PowerShell profile:
+1. Execute the PowerShell Script file: l2t.ps1
     ```powershell
-        notepad $PROFILE
+    # load and execute the script in the current session
+        . .\l2t.ps1
     ```
-2. Add the function + alias, save and exit:
+2. Test:
     ```powershell
-    if (Get-Command Invoke-L2T -ErrorAction SilentlyContinue) {
-        Remove-Item Function:Invoke-L2T
-    }
-
-    if (Get-Alias l2t -ErrorAction SilentlyContinue) {
-        Remove-Item Alias:l2t
-    }
-
-    function Invoke-L2T {
-        uv run -m app.main @args
-    }
-    ```
-3. Reload the profile:
-    ```powershell
-        Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # for unblocking the security policy (only if needed in the case of current user session)
-        
-        . $PROFILE
+   l2t --list
     ```
 
 #### For Unix (Linux/macOS)

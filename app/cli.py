@@ -220,7 +220,7 @@ class NLLBTranslationCLI:
             # Affichage d'un aperçu si pas de fichier de sortie spécifié
             preview = (translated_text[:500] + "...") if len(translated_text) > 500 else translated_text
         #    print("\n=== RESULTAT DE LA TRADUCTION ===")
-            print(preview)
+            print('[l2t]:<',preview,'>')
         #    print("===============================")
 
     def _determine_output_path(self) -> Optional[Path]:
