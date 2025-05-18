@@ -140,102 +140,102 @@ flowchart LR
 
 ### Step 1: Clone the Repository
 
-```bash
-git clone https://github.com/OlivierLAVAUD/L2T.git
-cd L2T
-```
+    ```bash
+    git clone https://github.com/OlivierLAVAUD/L2T.git
+    cd L2T
+    ```
 
 ### Step 2: Verify Installation
 
 Run a simple command to verify that L2T is functioning correctly:
-```bash
-uv run -m app.main --list-languages
-# or with alias
-l2t --list
+    ```bash
+    uv run -m app.main --list-languages
+    # or with alias
+    l2t --list
 
-This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
-```
+    This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
+    ```
 
 ### Step 3 (Optional):  Install the packages for Cuda (ex for cu118)
-```
-    # check your gpu
-    uv run gpu/gpu_version.py
-    # Install the right depedencies of Pytorch (ex cu118 for example)
-    uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-```
+    ```
+        # check your gpu
+        uv run gpu/gpu_version.py
+        # Install the right depedencies of Pytorch (ex cu118 for example)
+        uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+    ```
 
 ### Step 4:  Create an Alias
 
 #### For PowerShell (Windows)
 
 1. Open your PowerShell profile:
-```powershell
-    notepad $PROFILE
-```
+    ```powershell
+        notepad $PROFILE
+    ```
 2. Add the function + alias, save and exit:
-```powershell
-if (Get-Command Invoke-L2T -ErrorAction SilentlyContinue) {
-    Remove-Item Function:Invoke-L2T
-}
+    ```powershell
+    if (Get-Command Invoke-L2T -ErrorAction SilentlyContinue) {
+        Remove-Item Function:Invoke-L2T
+    }
 
-if (Get-Alias l2t -ErrorAction SilentlyContinue) {
-    Remove-Item Alias:l2t
-}
+    if (Get-Alias l2t -ErrorAction SilentlyContinue) {
+        Remove-Item Alias:l2t
+    }
 
-function Invoke-L2T {
-    uv run -m app.main @args
-}
-```
+    function Invoke-L2T {
+        uv run -m app.main @args
+    }
+    ```
 3. Reload the profile:
-```powershell
-    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # for unblocking the security policy (only if needed in the case of current user session)
-     
-    . $PROFILE
-```
+    ```powershell
+        Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # for unblocking the security policy (only if needed in the case of current user session)
+        
+        . $PROFILE
+    ```
 
 #### For Unix (Linux/macOS)
 
 1. Open your shell config file (~/.bashrc, ~/.zshrc, etc.):
-```bash
-    nano ~/.bashrc  # Pour Bash
-```
+    ```bash
+        nano ~/.bashrc  # Pour Bash
+    ```
 
 2. Add the function + alias:
-```bash
-    alias l2t='uv run -m app.main "$@"'
-```
+    ```bash
+        alias l2t='uv run -m app.main "$@"'
+    ```
 
 3. Reload the config:
-```bash
-    source ~/.bashrc
-```
+    ```bash
+        source ~/.bashrc
+    ```
 
 # Usage
 
 1. Translate a text string to French:
-```bash
-l2t "Text to translate" -t fra_Latn
-```
+    ```bash
+    l2t "Text to translate" -t fra_Latn
+    ```
 
 2. Translate a text string from French to English and specifying source language:
-```bash
-l2t "Texte à traduire" -t eng_Latn -s fra_Latn
-```
+    ```bash
+    l2t "Texte à traduire" -t eng_Latn -s fra_Latn
+    ```
 
 3. Translate a file and save the output on a specific name:
-```bash
-l2t "Texte à traduire" -t eng_Latn -s fra_Latn -o my_translated_file.txt
-```
+    ```bash
+    l2t "Texte à traduire" -t eng_Latn -s fra_Latn -o my_translated_file.txt
+    ```
 
 4. Translate a PDF ou TXT document from CLI with a automatic filename extension (T2L.txt) recording:
-```bash
-l2t -f docs/book.txt -t eng_Latn -s fra_Latn
-l2t -f docs/book.pdf -l eng_Latn -s fra_Latn
-```
+    ```bash
+    l2t -f docs/book.txt -t eng_Latn -s fra_Latn
+    l2t -f docs/book.pdf -l eng_Latn -s fra_Latn
+    ```
 5. For more details see manual
-```bash
-l2t --help
-```
+    ```bash
+    l2t --help
+    ```
 # Documentation
 
 [https://deepwiki.com/OlivierLAVAUD/L2T](https://deepwiki.com/OlivierLAVAUD/L2T)
