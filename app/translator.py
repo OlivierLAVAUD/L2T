@@ -1,210 +1,170 @@
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
 import torch
+import os
+import json
+from dotenv import load_dotenv
 
-class NLLBTranslator:
+load_dotenv()  # Charge les variables d'environnement depuis le fichier .env
+
+class NLLBTranslationService:
+    """
+    Service de traduction utilisant le modèle NLLB (No Language Left Behind) de Facebook/Meta.
+    Gère le chargement du modèle, la traduction et la gestion des langues supportées.
+    """
+    
     def __init__(self):
-        self.model = None
+        """Initialise le service de traduction."""
+        self.translation_model = None
         self.tokenizer = None
-        self._loaded = False
-        self.translator_pipe = None
-        self.supported_languages = {
-            'afr_Latn': 'Afrikaans',
-            'amh_Ethi': 'Amharique',
-            'ara_Arab': 'Arabe',
-            'asm_Beng': 'Assamais',
-            'ast_Latn': 'Asturien',
-            'azj_Latn': 'Azéri',
-            'bel_Cyrl': 'Biélorusse',
-            'ben_Beng': 'Bengali',
-            'bos_Latn': 'Bosnien',
-            'bul_Cyrl': 'Bulgare',
-            'cat_Latn': 'Catalan',
-            'ceb_Latn': 'Cebuano',
-            'ces_Latn': 'Tchèque',
-            'ckb_Arab': 'Kurde (Sorani)',
-            'cym_Latn': 'Gallois',
-            'dan_Latn': 'Danois',
-            'deu_Latn': 'Allemand',
-            'ell_Grek': 'Grec',
-            'eng_Latn': 'Anglais',
-            'est_Latn': 'Estonien',
-            'fin_Latn': 'Finnois',
-            'fra_Latn': 'Français',
-            'fuv_Latn': 'Fulfulde',
-            'gaz_Latn': 'Gayo',
-            'gle_Latn': 'Irlandais',
-            'glg_Latn': 'Galicien',
-            'guj_Gujr': 'Gujarati',
-            'hat_Latn': 'Créole haïtien',
-            'hau_Latn': 'Haoussa',
-            'heb_Hebr': 'Hébreu',
-            'hin_Deva': 'Hindi',
-            'hrv_Latn': 'Croate',
-            'hun_Latn': 'Hongrois',
-            'hye_Armn': 'Arménien',
-            'ibo_Latn': 'Igbo',
-            'ind_Latn': 'Indonésien',
-            'isl_Latn': 'Islandais',
-            'ita_Latn': 'Italien',
-            'jav_Latn': 'Javanais',
-            'jpn_Jpan': 'Japonais',
-            'kam_Latn': 'Kamba',
-            'kan_Knda': 'Kannada',
-            'kat_Geor': 'Géorgien',
-            'kaz_Cyrl': 'Kazakh',
-            'kea_Latn': 'Créole du Cap-Vert',
-            'khk_Cyrl': 'Khalkha Mongol',
-            'khm_Khmr': 'Khmer',
-            'kir_Cyrl': 'Kirghiz',
-            'kor_Hang': 'Coréen',
-            'lao_Laoo': 'Lao',
-            'lit_Latn': 'Lituanien',
-            'ltz_Latn': 'Luxembourgeois',
-            'lug_Latn': 'Ganda',
-            'luo_Latn': 'Luo',
-            'lvs_Latn': 'Letton',
-            'mai_Deva': 'Maithili',
-            'mal_Mlym': 'Malayalam',
-            'mar_Deva': 'Marathi',
-            'mkd_Cyrl': 'Macédonien',
-            'mlt_Latn': 'Maltais',
-            'mni_Beng': 'Manipuri',
-            'mya_Mymr': 'Birman',
-            'nld_Latn': 'Néerlandais',
-            'nno_Latn': 'Norvégien (Nynorsk)',
-            'nob_Latn': 'Norvégien (Bokmål)',
-            'npi_Deva': 'Népalais',
-            'nya_Latn': 'Chichewa',
-            'ory_Orya': 'Odia',
-            'pan_Guru': 'Pendjabi',
-            'pbt_Arab': 'Pachtou',
-            'pes_Arab': 'Persan',
-            'pol_Latn': 'Polonais',
-            'por_Latn': 'Portugais',
-            'ron_Latn': 'Roumain',
-            'rus_Cyrl': 'Russe',
-            'slk_Latn': 'Slovaque',
-            'slv_Latn': 'Slovène',
-            'sna_Latn': 'Shona',
-            'snd_Arab': 'Sindhi',
-            'som_Latn': 'Somali',
-            'spa_Latn': 'Espagnol',
-            'srp_Cyrl': 'Serbe',
-            'swe_Latn': 'Suédois',
-            'swh_Latn': 'Swahili',
-            'tam_Taml': 'Tamoul',
-            'tel_Telu': 'Télougou',
-            'tgk_Cyrl': 'Tadjik',
-            'tgl_Latn': 'Tagalog',
-            'tha_Thai': 'Thaï',
-            'tur_Latn': 'Turc',
-            'ukr_Cyrl': 'Ukrainien',
-            'urd_Arab': 'Ourdou',
-            'uzn_Latn': 'Ouzbek',
-            'vie_Latn': 'Vietnamien',
-            'xho_Latn': 'Xhosa',
-            'yor_Latn': 'Yoruba',
-            'zho_Hans': 'Chinois simplifié',
-            'zho_Hant': 'Chinois traditionnel',
-            'zsm_Latn': 'Malais',
-            'zul_Latn': 'Zoulou'
-        }
+        self._is_model_loaded = False
+        self.translation_pipeline = None
+        self.supported_languages = self._load_language_support_config()
+    
+    def _load_language_support_config(self) -> dict:
+        """
+        Charge la configuration des langues supportées depuis un fichier JSON.
+        
+        Returns:
+            dict: Dictionnaire des langues supportées
+            
+        Raises:
+            RuntimeError: Si le chargement du fichier échoue
+        """
+        config_path = os.getenv('SUPPORTED_LANGUAGES_FILE', 'app/supported_languages.json')
+        try:
+            with open(config_path, 'r', encoding='utf-8') as config_file:
+                return json.load(config_file)
+        except Exception as error:
+            raise RuntimeError(f"Erreur lors du chargement des langues supportées: {str(error)}")
 
-    def load_model(self):
-        """Charge le modèle optimisé pour la vitesse"""
-        if self._loaded:
+    def initialize_translation_model(self):
+        """
+        Charge et configure le modèle de traduction avec des optimisations de performance.
+        
+        Raises:
+            RuntimeError: Si le chargement du modèle échoue
+        """
+        if self._is_model_loaded:
             return
 
         try:
-            # Configuration pour performance maximale
-            torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
+            # Configuration pour performance optimale
+            precision = torch.float16 if torch.cuda.is_available() else torch.float32
+            model_name = os.getenv('MODEL_NAME', "facebook/nllb-200-distilled-600M")
 
-            self.model = AutoModelForSeq2SeqLM.from_pretrained(
-                "facebook/nllb-200-distilled-600M",
+            # Chargement du modèle
+            self.translation_model = AutoModelForSeq2SeqLM.from_pretrained(
+                model_name,
                 device_map="auto",
-                torch_dtype=torch_dtype
+                torch_dtype=precision
             )
 
+            # Chargement du tokenizer
             self.tokenizer = AutoTokenizer.from_pretrained(
-                "facebook/nllb-200-distilled-600M",
+                model_name,
                 use_fast=True  # Tokenizer rapide
             )
 
-            # Pipeline optimisé
-            self.translator_pipe = pipeline(
+            # Configuration du pipeline de traduction
+            self.translation_pipeline = pipeline(
                 "translation",
-                model=self.model,
+                model=self.translation_model,
                 tokenizer=self.tokenizer,
-            #    device=self.model,
                 truncation=True,
-                max_length=512  # Longueur optimale pour performance
+                max_length=int(os.getenv('MAX_LENGTH', 512))
             )
 
-            self._loaded = True
-        except Exception as e:
-            raise RuntimeError(f"Erreur de chargement: {str(e)}")
+            self._is_model_loaded = True
+            
+        except Exception as error:
+            raise RuntimeError(f"Erreur lors du chargement du modèle: {str(error)}")
 
-    def translate_batch(self, texts: list, target_lang: str, source_lang: str = None) -> list:
-        """Traduction par batch pour meilleure performance"""
-        if not self._loaded:
-            self.load_model()
+    def batch_translate_texts(self, texts: list[str], target_language: str, source_language: str = None) -> list[str]:
+        """
+        Traduit une liste de textes en batch pour une meilleure performance.
+        
+        Args:
+            texts: Liste des textes à traduire
+            target_language: Code langue cible
+            source_language: Code langue source (optionnel)
+            
+        Returns:
+            Liste des textes traduits
+            
+        Raises:
+            RuntimeError: Si la traduction échoue
+        """
+        if not self._is_model_loaded:
+            self.initialize_translation_model()
 
         try:
             # Préfixe de langue pour NLLB
-            if source_lang:
-                src_prefix = f"{source_lang}>"
-            else:
-                src_prefix = ""
+            source_prefix = f"{source_language}>" if source_language else ""
 
-            results = self.translator_pipe(
+            translations = self.translation_pipeline(
                 texts,
-                src_lang=src_prefix,
-                tgt_lang=target_lang,
-                batch_size=8,  # Taille de batch optimale
-                num_beams=2,   # Réduire pour plus de vitesse
+                src_lang=source_prefix,
+                tgt_lang=target_language,
+                batch_size=int(os.getenv('BATCH_SIZE', 8)),
+                num_beams=int(os.getenv('NUM_BEAMS', 2)),
                 early_stopping=True
             )
-            return [r['translation_text'] for r in results]
-        except Exception as e:
-            raise RuntimeError(f"Erreur de traduction: {str(e)}")
+            
+            return [result['translation_text'] for result in translations]
+            
+        except Exception as error:
+            raise RuntimeError(f"Erreur de traduction: {str(error)}")
 
-    def get_supported_languages(self):
-        """Retourne les langues supportées avec leurs codes."""
+    def get_supported_languages(self) -> dict:
+        """Retourne la liste des langues supportées avec leurs codes."""
         return self.supported_languages
 
-    def is_language_supported(self, lang_code: str) -> bool:
-        """Vérifie si une langue est supportée"""
-        return lang_code in self.supported_languages
+    def is_language_supported(self, language_code: str) -> bool:
+        """Vérifie si une langue est supportée par le service."""
+        return language_code in self.supported_languages
 
-    def translate(self, text, target_lang, source_lang=None):
-        """Version corrigée avec gestion explicite du device"""
-        if not self._loaded:
-            self.load_model()
+    def translate_text(self, text: str, target_language: str, source_language: str = None) -> str:
+        """
+        Traduit un texte unique avec gestion explicite du device (GPU/CPU).
+        
+        Args:
+            text: Texte à traduire
+            target_language: Code langue cible
+            source_language: Code langue source (optionnel)
+            
+        Returns:
+            Texte traduit
+            
+        Raises:
+            RuntimeError: Si la traduction échoue
+        """
+        if not self._is_model_loaded:
+            self.initialize_translation_model()
 
         try:
-            # Force le device GPU
+            # Sélection du device (GPU si disponible)
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-            self.model.to(device)
-            
-            if source_lang:
-                self.tokenizer.src_lang = source_lang
+            self.translation_model.to(device)
 
-            # Tokenize en spécifiant le device
-            inputs = self.tokenizer(
-                text, 
+            if source_language:
+                self.tokenizer.src_lang = source_language
+
+            # Tokenization sur le bon device
+            input_tokens = self.tokenizer(
+                text,
                 return_tensors="pt",
                 truncation=True,
-                max_length=1024
-            ).to(device)  # <-- Correction clé ici
+                max_length=int(os.getenv('MAX_LENGTH', 1024))
+            ).to(device)
 
-            # Génération sur le bon device
-            translated = self.model.generate(
-                **inputs,
-                forced_bos_token_id=self.tokenizer.convert_tokens_to_ids([target_lang]),
-                max_length=1024
+            # Génération de la traduction
+            translated_tokens = self.translation_model.generate(
+                **input_tokens,
+                forced_bos_token_id=self.tokenizer.convert_tokens_to_ids([target_language]),
+                max_length=int(os.getenv('MAX_LENGTH', 1024))
             )
-            
-            return self.tokenizer.decode(translated[0], skip_special_tokens=True)
-            
-        except Exception as e:
-            raise RuntimeError(f"Erreur de traduction: {str(e)}")
+
+            return self.tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
+
+        except Exception as error:
+            raise RuntimeError(f"Erreur de traduction: {str(error)}")

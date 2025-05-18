@@ -1,4 +1,4 @@
-from .cli import TranslationCLI
+from .cli import NLLBTranslationCLI
 
 __version__ = "1.0.0"
-__all__ = ['TranslationCLI']
+__all__ = ['NLLBTranslationCLI']

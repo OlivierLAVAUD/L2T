@@ -1,12 +1,12 @@
 import sys
-from app.cli import TranslationCLI
+from app.cli import NLLBTranslationCLI
 from .optimizations import configure_environment
 
 def main():
     """Point d'entrée avec optimisations"""
     configure_environment()
     try:
-        cli = TranslationCLI()
+        cli = NLLBTranslationCLI()
         cli.run()
     except KeyboardInterrupt:
         print("\nTraduction interrompue")

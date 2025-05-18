@@ -22,3 +22,6 @@ l2t-code.txt
 $PROFILE.txt
 -README copy.md
 app/minimal/nllb copy 2-.py
+/app/tmp
+app/.env copy
+/docs

@@ -3,170 +3,235 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from .logger import setup_logging, log_execution_time
-from .translator import NLLBTranslator
+from .translator import NLLBTranslationService
 from .file_handlers import FileHandler
-from .utils import ProgressHandler, TextProcessor
+from .utils import ProgressVisualizer, TextSegmenter
 
-class TranslationCLI:
-    """Interface CLI optimisée pour la traduction NLLB-200"""
+class NLLBTranslationCLI:
+    """Interface en ligne de commande pour le service de traduction NLLB"""
 
     def __init__(self):
         self.logger = setup_logging()
-        self.translator = NLLBTranslator()
-        self.args = self._parse_arguments()
-        self.start_time = datetime.now()
+        self.translation_service = NLLBTranslationService()
+        self.command_args = self._setup_command_line_interface()
+        self.execution_start_time = datetime.now()
 
-    def _parse_arguments(self) -> argparse.Namespace:
-        """Configure les arguments CLI"""
-        parser = argparse.ArgumentParser(
-            description="Traducteur CLI NLLB-200 (Optimisé GPU)",
+    def _setup_command_line_interface(self) -> argparse.Namespace:
+        """Configure les arguments de la ligne de commande"""
+        argument_parser = argparse.ArgumentParser(
+            description="Interface CLI pour le service de traduction NLLB (Optimisé GPU)",
             formatter_class=argparse.ArgumentDefaultsHelpFormatter
         )
 
         # Arguments principaux
-        parser.add_argument('input', nargs='?', help="Texte ou fichier à traduire (.txt/.pdf)")
+        argument_parser.add_argument(
+            'input',
+            nargs='?',
+            help="Texte à traduire ou chemin vers un fichier (.txt/.pdf)"
+        )
 
         # Options de langue
-        parser.add_argument('-l', '--lang', help="Code langue cible (ex: fra_Latn)")
-        parser.add_argument('-s', '--source-lang', help="Code langue source")
-        parser.add_argument('--list-languages', action='store_true', help="Affiche les langues supportées")
+        argument_parser.add_argument(
+            '-t', '--target-language',
+            help="Code de la langue cible (ex: fra_Latn)"
+        )
+        argument_parser.add_argument(
+            '-s', '--source-language',
+            help="Code de la langue source (détection automatique si omis)"
+        )
+        argument_parser.add_argument(
+            '--list-languages',
+            action='store_true',
+            help="Affiche la liste des langues supportées"
+        )
 
-        # Options techniques
-        parser.add_argument('-o', '--output', help="Fichier de sortie")
-        parser.add_argument('-e', '--encoding', default='utf-8', help="Encodage des fichiers")
-        parser.add_argument('-c', '--chunk-size', type=int, default=500, help="Taille des segments")
-        parser.add_argument('--batch-size', type=int, default=8, help="Taille des batchs GPU")
-        parser.add_argument('--debug', action='store_true', help="Mode debug")
+        # Options de traitement
+        argument_parser.add_argument(
+            '-o', '--output-file',
+            help="Fichier de sortie pour la traduction"
+        )
+        argument_parser.add_argument(
+            '-e', '--encoding',
+            default='utf-8',
+            help="Encodage des fichiers texte"
+        )
+        argument_parser.add_argument(
+            '-c', '--chunk-size',
+            type=int,
+            default=500,
+            help="Taille maximale des segments de texte à traduire"
+        )
+        argument_parser.add_argument(
+            '--batch-size',
+            type=int,
+            default=8,
+            help="Nombre de segments à traduire simultanément (optimisation GPU)"
+        )
+        argument_parser.add_argument(
+            '--debug-mode',
+            action='store_true',
+            help="Active le mode debug pour le logging"
+        )
+        argument_parser.add_argument(
+            '-f', '--file',
+            action='store_true',
+            help="Indique que l'entrée est un fichier"
+        )
 
-        return parser.parse_args()
+        return argument_parser.parse_args()
 
     def run(self) -> None:
-        """Point d'entrée principal"""
+        """Point d'entrée principal (compatibilité avec main.py)"""
+        self.execute()
+
+    def execute(self) -> None:
+        """Nouveau point d'entrée principal de l'application CLI"""
         try:
-            if self.args.list_languages:
-                self._display_supported_languages()
+            if self.command_args.list_languages:
+                self._show_available_languages()
                 return
 
-            self._validate_arguments()
-            content = self._load_content()
-            translated = self._translate_content(content)
-            self._handle_output(translated)
+            self._validate_command_arguments()
+            input_content = self._load_input_content()
+            translated_content = self._process_translation(input_content)
+            self._save_or_display_result(translated_content)
 
         except KeyboardInterrupt:
-            self.logger.info("Traduction interrompue")
+            self.logger.info("Traduction annulée par l'utilisateur")
             sys.exit(0)
-        except Exception as e:
-            self.logger.critical(f"Erreur: {str(e)}", exc_info=self.args.debug)
+        except Exception as error:
+            self.logger.critical(
+                f"Erreur critique: {str(error)}",
+                exc_info=self.command_args.debug_mode
+            )
             sys.exit(1)
         finally:
-            log_execution_time(self.start_time, "Traduction terminée")
+            log_execution_time(
+                self.execution_start_time,
+                "Temps total d'exécution"
+            )
 
-    def _validate_arguments(self):
-        """Valide les arguments"""
-        if not self.args.input:
-            raise ValueError("Aucun texte ou fichier spécifié")
+    def _validate_command_arguments(self):
+        """Valide les arguments fournis en ligne de commande"""
+        if not self.command_args.input:
+            raise ValueError("Aucune entrée spécifiée (texte ou fichier)")
 
-        if not self.translator.is_language_supported(self.args.lang):
-            raise ValueError(f"Langue cible non supportée: {self.args.lang}")
+        if not self.command_args.target_language:
+            raise ValueError("Langue cible non spécifiée (option -t/--target-language requise)")
 
-    def _display_supported_languages(self):
-        """Affiche les langues disponibles"""
-        langs = self.translator.get_supported_languages()
-        print("\nLangues supportées:")
-        for code, name in langs.items():
-            print(f"  {code}: {name}")
+        if not self.translation_service.is_language_supported(self.command_args.target_language):
+            raise ValueError(f"Langue cible non supportée: {self.command_args.target_language}")
 
-    def _load_content(self) -> str:
-        """Charge le contenu à traduire"""
-        input_path = Path(self.args.input)
+    def _show_available_languages(self):
+        """Affiche les langues disponibles dans un format lisible"""
+        languages = self.translation_service.get_supported_languages()
+        print("\nLangues supportées par le service de traduction:")
+        for language_code, language_name in languages.items():
+            print(f"  {language_code:12} → {language_name}")
 
-        if not input_path.exists() and len(self.args.input) < 1000:
-            return self.args.input
+    def _load_input_content(self) -> str:
+        """Charge le contenu à traduire depuis un fichier ou une chaîne directe"""
+        if self.command_args.file:
+            input_path = Path(self.command_args.input)
+            if not input_path.exists():
+                raise FileNotFoundError(f"Fichier introuvable: {input_path}")
+            if input_path.is_dir():
+                raise IsADirectoryError(f"Le chemin spécifié est un répertoire : {input_path}")
+            return FileHandler.read_file(input_path, self.command_args.encoding)
+        else:
+            return self.command_args.input
 
-        try:
-            if input_path.is_file():
-                return FileHandler.read_file(input_path, self.args.encoding)
-            raise FileNotFoundError(f"Fichier introuvable: {input_path}")
-        except Exception as e:
-            raise IOError(f"Erreur lecture: {str(e)}")
-
-    def _translate_content(self, content: str) -> str:
-        """Gère la traduction avec optimisations et progression"""
+    def _process_translation(self, content: str) -> str:
+        """Gère le processus de traduction avec gestion des erreurs"""
         if not content.strip():
-            raise ValueError("Contenu vide")
+            raise ValueError("Le contenu à traduire est vide")
 
-        # Petit texte : traduction directe sans progression
-        if len(content) <= self.args.chunk_size:
+        # Traduction directe pour les petits textes
+        if len(content) <= self.command_args.chunk_size:
             try:
-                return self.translator.translate(content, self.args.lang, self.args.source_lang)
-            except Exception as e:
-                self.logger.error(f"Échec traduction: {str(e)}")
+                return self.translation_service.translate_text(
+                    content,
+                    self.command_args.target_language,
+                    self.command_args.source_language
+                )
+            except Exception as error:
+                self.logger.error(f"Échec de la traduction: {str(error)}")
                 raise
 
-        # Gros texte : avec barre de progression
+        # Traduction segmentée pour les gros textes
         try:
-            self.logger.info("Lancement de la traduction segmentée...")
-            result = self._translate_in_chunks(content)
+            self.logger.info("Début de la traduction segmentée...")
+            result = self._translate_large_content(content)
             self.logger.info("Traduction segmentée terminée avec succès")
             return result
-        except Exception as e:
-            self.logger.error(f"Échec traduction segmentée: {str(e)}")
+        except Exception as error:
+            self.logger.error(f"Échec de la traduction segmentée: {str(error)}")
             raise
 
-    def _translate_in_chunks(self, content: str) -> str:
-        # Traduction par segments avec progression visuelle
-        paragraphs = TextProcessor.split_paragraphs(content)
+    def _translate_large_content(self, content: str) -> str:
+        """Version simplifiée avec l'ancienne logique"""
+        paragraphs = TextSegmenter.split_paragraphs(content)
         total = len(paragraphs)
-        results = []
+        translated_segments = []
         start_time = time.time()
 
-        print(f"\nTraduction de {total} segments:")
-        ProgressHandler.display_progress(0, total, start_time)
+        print(f"\nTraduction de {total} segments...")
 
         for i, para in enumerate(paragraphs, 1):
             if not para.strip():
-                results.append("")
+                translated_segments.append("")
+                ProgressVisualizer.display_progress(i, total, start_time)
                 continue
 
             try:
-                # Traduction du segment
-                translated = self.translator.translate(para, self.args.lang, self.args.source_lang)
-                results.append(translated)
-            except Exception as e:
-                self.logger.warning(f"Erreur segment {i}: {str(e)}")
-                results.append("[ERREUR]")
+                translated = self.translation_service.translate_text(
+                    para,
+                    self.command_args.target_language,
+                    self.command_args.source_language
+                )
+                translated_segments.append(translated)
+            except Exception as error:
+                self.logger.warning(f"Erreur segment {i}: {str(error)}")
+                translated_segments.append("[TRANSLATION_ERROR]")
 
-            # Mise à jour de la progression (optimisée pour performance)
-            if i % max(1, total//100) == 0 or i == total:  # 100 updates max
-                ProgressHandler.display_progress(i, total, start_time)
+            ProgressVisualizer.display_progress(i, total, start_time)
 
-        print()  # Retour à la ligne final
-        return "\n".join(results)
+        print()  # Saut de ligne final
+        return "\n".join(translated_segments)
 
-    def _handle_output(self, translated_text: str) -> None:
-        """Gère la sortie avec génération automatique du nom de fichier"""
-        input_path = Path(self.args.input)
-        output_path = self._generate_output_path(input_path)
+    def _save_or_display_result(self, translated_text: str) -> None:
+        """Gère la sortie du résultat (fichier ou affichage console)"""
+        output_path = self._determine_output_path()
 
         if output_path:
             try:
-                FileHandler.write_output(translated_text, output_path, self.args.encoding)
-                self.logger.info(f"Traduction sauvegardée dans {output_path}")
-            except Exception as e:
-                raise IOError(f"Erreur sauvegarde: {str(e)}")
+                FileHandler.write_output(
+                    translated_text,
+                    output_path,
+                    self.command_args.encoding
+                )
+                self.logger.info(f"Résultat sauvegardé dans: {output_path}")
+            except Exception as error:
+                raise IOError(f"Erreur lors de la sauvegarde: {str(error)}")
         else:
-            # Affichage console si pas de fichier source
-            preview = translated_text[:500] + ("..." if len(translated_text) > 500 else "")
-            print("\n=== TRADUCTION ===")
+            # Affichage d'un aperçu si pas de fichier de sortie spécifié
+            preview = (translated_text[:500] + "...") if len(translated_text) > 500 else translated_text
+        #    print("\n=== RESULTAT DE LA TRADUCTION ===")
             print(preview)
-            print("=================")
+        #    print("===============================")
 
-    def _generate_output_path(self, input_path: Path) -> Path:
-        """Génère le chemin de sortie automatiquement si -o non spécifié"""
-        if not self.args.output and input_path.is_file():
-            lang_code = self.args.lang.replace('_', '-')  # Pour éviter les problèmes de fichiers
-            return input_path.parent / f"{input_path.stem}.{lang_code}.T2L.txt"
-        return Path(self.args.output) if self.args.output else None
+    def _determine_output_path(self) -> Optional[Path]:
+        """Détermine le chemin de sortie automatiquement si besoin"""
+        if self.command_args.output_file:
+            return Path(self.command_args.output_file)
+
+        if self.command_args.file:
+            input_path = Path(self.command_args.input)
+            if input_path.is_file():
+                lang_code = self.command_args.target_language.replace('_', '-')
+                return input_path.parent / f"{input_path.stem}_{lang_code}_translated.txt"
+
+        return None

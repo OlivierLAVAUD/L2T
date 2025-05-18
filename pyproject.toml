@@ -1,12 +1,22 @@
 [project]
 name = "L2T"
-version = "2.0.0"
-description ="Language to Translate (L2T)"
+version = "2.2.0"
+description = "Language to Translate (L2T)"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "accelerate>=1.6.0",
     "pypdf2>=3.0.1",
-    "torch>=2.7.0",
+    "torch>=2.2.1; platform_system=='Linux' and platform_machine=='x86_64'",
+    "torchvision>=0.17.1; platform_system=='Linux' and platform_machine=='x86_64'",
+    "torchaudio>=2.2.1; platform_system=='Linux' and platform_machine=='x86_64'",
     "transformers>=4.51.3",
+    "python-dotenv>=1.1.0",
 ]
+
+# Configuration pour pip (nécessite pip >= 10.0)
+[tool.pip]
+index-url = "https://download.pytorch.org/whl/cu118"
+extra-index-url = "https://pypi.org/simple"  # Pour les autres packages
+
+# uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118

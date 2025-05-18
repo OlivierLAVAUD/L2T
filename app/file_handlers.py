@@ -2,6 +2,10 @@ import PyPDF2
 from pathlib import Path
 from typing import Optional, Union
 import logging
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 class FileHandler:
     """Gestionnaire de fichiers pour la lecture/écriture de différents formats."""
