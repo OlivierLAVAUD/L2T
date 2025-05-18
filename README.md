@@ -148,16 +148,16 @@ flowchart LR
 ### Step 2: Verify Installation
 
 Run a simple command to verify that L2T is functioning correctly:
-    ```bash
+```bash
     uv run -m app.main --list-languages
     # or with alias
     l2t --list
-
+```
     This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
-    ```
+    
 
 ### Step 3 (Optional):  Install the packages for Cuda (ex for cu118)
-    ```
+    ```bash
         # check your gpu
         uv run gpu/gpu_version.py
         # Install the right depedencies of Pytorch (ex cu118 for example)
