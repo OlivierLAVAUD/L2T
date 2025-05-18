@@ -149,9 +149,7 @@ flowchart LR
 
 Run a simple command to verify that L2T is functioning correctly:
 ```bash
-    uv run -m app.main --list-languages
-    # or with alias
-    l2t --list
+    uv run -m app.main --list
 ```
     This command should display a list of supported languages, indicating that the system is properly installed and the NLLB-200 model is accessible.
     
