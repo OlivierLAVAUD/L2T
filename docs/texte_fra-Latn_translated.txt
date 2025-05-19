@@ -1,0 +1,44 @@
+Voici un texte conçu pour tester une application de traduction. Il contient des phrases variées avec différents niveaux de complexité, des expressions idiomatiques, des temps verbaux multiples et de la technique et du vocabulaire courants:
+
+Texte de test pour application de traduction 
+
+Phrases simples 
+
+Elle mange une pomme verte, il fait beau aujourd'hui.
+
+Expressions idiomatiques 
+
+Il a cassé sa pipe après une longue maladie. Elle a passé la nuit à brûler l'huile de minuit.
+
+Nous aurions fini le projet si le client avait validé les modèles. 
+
+Technique vocabulaire/scientifique 
+
+La polymérase de l'ADN L'ADN catalyse la réplication de l'ADN lors de la mitose. Le modèle GPT-4 utilise un réseau de neurones transformateurs pour générer du texte. 
+
+Négations et interrogatoires 
+
+Je ne sais pas si elle viendra, car elle n'a pas été confirmée.
+
+Le vent murmure à travers les branches décharnées des arbres, comme une plainte venue d'un autre temps. Les souvenirs, tels des fantômes, dansent dans la pénombre de son esprit. "
+
+Mots ambigus/sens multiples 
+
+Le bureau est en bois. (meuble) vs Il est assis au bureau. (lieu de travail) Elle a perdu sa montre. (égarer) vs L'équipe a perdu le match. (échouer) 
+
+Nombre et dates 
+
+3,14 est une approximation de π. La Révolution française a commencé en 1789. 
+
+Dialogue informel 
+
+ Tas vu ce film?  Ouais, trop cool!   Jpeux pas, jai piscine.  (expression ironique pour "je suis occupé") 
+
+"La lune était une faucille d'argent dans le champ des étoiles".
+
+Objectifs de l'essai: 
+
+Vérifiez la précision des temps verbaux. Identifiez la gestion des expressions idiomatiques. Évaluez la compréhension du contexte pour les mots ambiguos. 
+Tester la fluidité des tournois littéraires. 
+
+Ce texte couvre une large gamme de défis linguistiques. Vous pouvez l'adapter en ajoutant des termes spécifiques à votre domaine (juridique, médical, etc.). Bon test!

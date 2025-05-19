@@ -26,6 +26,7 @@ app/minimal/nllb copy 2-.py
 app/.env copy
 code-source.txt
 app/cli copy 2.py
+l2t copy.ps1
 l2t copy 2.ps1
 l2t copy 3.ps1
 README-INTERNAL.md
