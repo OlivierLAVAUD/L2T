@@ -24,4 +24,10 @@ $PROFILE.txt
 app/minimal/nllb copy 2-.py
 /app/tmp
 app/.env copy
-/docs
+code-source.txt
+app/cli copy 2.py
+l2t copy 2.ps1
+l2t copy 3.ps1
+README-INTERNAL.md
+app/utils copy.py
+docs/text.txt

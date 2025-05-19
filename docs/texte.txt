@@ -1,0 +1,58 @@
+Voici un texte conçu pour tester une application de traduction. Il contient des phrases variées avec différents niveaux de complexité, des expressions idiomatiques, des temps verbaux multiples et du vocabulaire technique et courant :
+
+Texte de test pour application de traduction
+
+    Phrases simples
+
+        Le chat dort sur le canapé.
+        Elle mange une pomme verte.
+        Il fait beau aujourd’hui.
+
+    Expressions idiomatiques
+
+        Il a cassé sa pipe après une longue maladie. (idiome pour "il est décédé")
+        Elle a passé la nuit à brûler l’huile de minuit. (travailler tard)
+
+    Temps verbaux complexes
+        Si j’avais su, je serais venu plus tôt.
+        Nous aurions fini le projet si le client avait validé les maquettes.
+
+    Vocabulaire technique/scientifique
+
+        L’ADN polymérase catalyse la réplication de l’ADN lors de la mitose.
+        Le modèle GPT-4 utilise un réseau de neurones transformers pour générer du texte.
+
+    Négations et interrogations
+
+        Pourquoi n’as-tu pas répondu au message ?
+        Je ne sais pas si elle viendra, car elle n’a pas confirmé.
+
+    Texte littéraire (style complexe)
+    "Le vent murmurait à travers les branches décharnées des arbres, comme une complainte venue d’un autre temps. Les souvenirs, tels des fantômes, dansaient dans la pénombre de son esprit."
+
+    Mots ambigus/sens multiples
+
+        Le bureau est en bois. (meuble) vs Il est assis au bureau. (lieu de travail)
+        Elle a perdu sa montre. (égarer) vs L’équipe a perdu le match. (échouer)
+
+    Nombres et dates
+
+        3,14 est une approximation de π.
+        La Révolution française a commencé en 1789.
+
+    Dialogue informel
+
+        « T’as vu ce film ? — Ouais, trop cool ! »
+        « J’peux pas, j’ai piscine. » (expression ironique pour "je suis occupé")
+
+    Métaphores/poésie
+    "La lune était une faucille d’argent dans le champ des étoiles."
+
+Objectifs du test :
+
+    Vérifier la précision des temps verbaux.
+    Identifier la gestion des expressions idiomatiques.
+    Évaluer la compréhension du contexte pour les mots ambigus.
+    Tester la fluidité des tournures littéraires.
+
+Ce texte couvre un large éventail de défis linguistiques. Vous pouvez l’adapter en ajoutant des termes spécifiques à votre domaine (juridique, médical, etc.). Bon test !

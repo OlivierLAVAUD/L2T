@@ -13,9 +13,12 @@ class TranslationDataset(Dataset):
         return self.texts[idx]
 
 def configure_environment():
-    """Configure l'environnement pour performance maximale"""
-    torch.backends.cudnn.benchmark = True
-    torch.set_float32_matmul_precision('high')
+    torch.backends.cudnn.benchmark = False  # Désactivé pour la stabilité
+    torch.set_float32_matmul_precision('medium')  # Équilibre précision/performance
     
     if torch.cuda.is_available():
+        # Nettoyage approfondi
+        torch.cuda.synchronize()
         torch.cuda.empty_cache()
+        # Limite l'utilisation mémoire
+        torch.cuda.set_per_process_memory_fraction(0.8)

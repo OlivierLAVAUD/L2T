@@ -12,15 +12,19 @@ class FileHandler:
 
     @staticmethod
     def read_file(file_path: Union[str, Path], encoding: str = 'utf-8') -> Optional[str]:
-        """Lit un fichier texte ou PDF."""
-        path = Path(file_path)
+        """Lecture avec gestion robuste des encodages"""
         try:
-            if path.suffix.lower() == '.pdf':
-                return FileHandler._read_pdf(path)
-            return FileHandler._read_text_file(path, encoding)
+            with open(file_path, 'rb') as f:
+                raw_data = f.read()
+                for enc in ['utf-8', 'iso-8859-1', 'cp1252']:  # Essai des encodages courants
+                    try:
+                        return raw_data.decode(enc)
+                    except UnicodeDecodeError:
+                        continue
+                raise ValueError(f"Encodage non reconnu pour {file_path}")
         except Exception as e:
-            logging.error(f"Erreur lecture fichier {path}: {str(e)}")
-            raise
+            logging.error(f"Erreur lors de la lecture du fichier {file_path}: {str(e)}")
+            return None
 
     @staticmethod
     def _read_pdf(pdf_path: Path) -> str:
@@ -46,13 +50,19 @@ class FileHandler:
         except Exception as e:
             raise IOError(f"Erreur lecture fichier: {str(e)}")
 
+
     @staticmethod
-    def write_output(content: str, output_path: Union[str, Path], encoding: str = 'utf-8') -> None:
-        """Écrit le contenu dans un fichier."""
-        path = Path(output_path)
+    def write_output(content: str, output_path: Path, encoding: str = 'utf-8') -> None:
+        """Écriture sécurisée avec vérification d'intégrité"""
         try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            with open(path, 'w', encoding=encoding) as f:
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, 'w', encoding=encoding) as f:
+                # Vérification proactive des marqueurs
+            #    content = content.replace("CONTECT", "CONTEXT")
                 f.write(content)
+            # Validation a posteriori
+            with open(output_path, 'r', encoding=encoding) as f:
+                if "CONTECT" in f.read():
+                    raise IOError("Échec de correction des marqueurs")
         except Exception as e:
-            raise IOError(f"Erreur écriture fichier {path}: {str(e)}")
+            raise IOError(f"Erreur d'écriture validée : {str(e)}")

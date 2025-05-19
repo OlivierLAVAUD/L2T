@@ -9,6 +9,7 @@ from .logger import setup_logging, log_execution_time
 from .translator import NLLBTranslationService
 from .file_handlers import FileHandler
 from .utils import ProgressVisualizer, TextSegmenter
+import torch 
 
 class NLLBTranslationCLI:
     """Interface en ligne de commande pour le service de traduction NLLB"""
@@ -85,6 +86,17 @@ class NLLBTranslationCLI:
 
     def run(self) -> None:
         """Point d'entrée principal (compatibilité avec main.py)"""
+
+        # Dans votre code principal
+    #    translator = NLLBTranslationService()
+
+        # Rechargement standard (utilise le cache si disponible)
+    #    translator.reload_model()
+
+        # Rechargement forcé + suppression cache local
+    #    translator.reload_model(force_download=True)
+
+
         self.execute()
 
     def execute(self) -> None:
@@ -119,11 +131,21 @@ class NLLBTranslationCLI:
         if not self.command_args.input:
             raise ValueError("Aucune entrée spécifiée (texte ou fichier)")
 
+        if not self.command_args.source_language:
+            raise ValueError("Langue source non spécifiée (option -s/--source-language requise)")
+
         if not self.command_args.target_language:
             raise ValueError("Langue cible non spécifiée (option -t/--target-language requise)")
 
-        if not self.translation_service.is_language_supported(self.command_args.target_language):
+        # Validation des codes de langue
+        for lang_type in ['source', 'target']:
+            lang = getattr(self.command_args, f"{lang_type}_language")
+            if not self.translation_service.is_language_supported(lang):
+                raise ValueError(f"Langue {lang_type} non supportée: {lang}")
+
+    """       if not self.translation_service.is_language_supported(self.command_args.target_language):
             raise ValueError(f"Langue cible non supportée: {self.command_args.target_language}")
+    """
 
     def _show_available_languages(self):
         """Affiche les langues disponibles dans un format lisible"""
@@ -172,36 +194,56 @@ class NLLBTranslationCLI:
             raise
 
     def _translate_large_content(self, content: str) -> str:
-        """Version simplifiée avec l'ancienne logique"""
+        """Traduit un contenu volumineux en gérant les erreurs de marqueurs et la mémoire
+        
+        Args:
+            content: Texte source à traduire
+            
+        Returns:
+            Texte traduit avec structure préservée
+        """
         paragraphs = TextSegmenter.split_paragraphs(content)
-        total = len(paragraphs)
         translated_segments = []
         start_time = time.time()
+        total_paragraphs = len(paragraphs)
+        
+        self.logger.debug(f"Début traduction de {total_paragraphs} paragraphes")
 
-        print(f"\nTraduction de {total} segments...")
-
-        for i, para in enumerate(paragraphs, 1):
-            if not para.strip():
-                translated_segments.append("")
-                ProgressVisualizer.display_progress(i, total, start_time)
-                continue
-
+        for idx, paragraph in enumerate(paragraphs, 1):
             try:
+                # Gestion des paragraphes vides
+                if not paragraph.strip():
+                    translated_segments.append("")
+                    ProgressVisualizer.display_progress(idx, total_paragraphs, start_time)
+                    continue
+               
+                # Traduction avec suivi de mémoire
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+        
+            
                 translated = self.translation_service.translate_text(
-                    para,
+                    paragraph,
                     self.command_args.target_language,
                     self.command_args.source_language
                 )
-                translated_segments.append(translated)
-            except Exception as error:
-                self.logger.warning(f"Erreur segment {i}: {str(error)}")
-                translated_segments.append("[TRANSLATION_ERROR]")
+                
+                # Validation et correction du résultat
+                final_text = translated.replace("[CONTECT", "[CONTEXT")
+                if final_text != translated:
+                    self.logger.debug(f"Corrigé marqueur dans le paragraphe {idx}")
+                    
+                translated_segments.append(final_text)
+                
+            except Exception as e:
+                self.logger.error(f"Erreur paragraphe {idx}: {str(e)}")
+                translated_segments.append(f"[ERROR: {paragraph[:50]}...]")
+                
+            ProgressVisualizer.display_progress(idx, total_paragraphs, start_time)
 
-            ProgressVisualizer.display_progress(i, total, start_time)
-
-        print()  # Saut de ligne final
+        self.logger.info(f"Traduction terminée - {total_paragraphs} paragraphes traités")
         return "\n".join(translated_segments)
-
+    
     def _save_or_display_result(self, translated_text: str) -> None:
         """Gère la sortie du résultat (fichier ou affichage console)"""
         output_path = self._determine_output_path()

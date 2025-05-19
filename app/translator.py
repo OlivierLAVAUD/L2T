@@ -20,6 +20,43 @@ class NLLBTranslationService:
         self.translation_pipeline = None
         self.supported_languages = self._load_language_support_config()
     
+    def reload_model(self, force_download: bool = False):
+        """Recharge le modèle avec option de suppression du cache local"""
+        model_name = os.getenv('MODEL_NAME', "facebook/nllb-200-distilled-600M")
+        
+        # 1. Suppression du cache local si demandé
+        """if force_download:
+            cache_dir = Path.home() / '.cache' / 'huggingface' / 'hub'
+            if cache_dir.exists():
+                shutil.rmtree(cache_dir)
+                self.logger.info("Cache Hugging Face local supprimé")
+        """
+        
+        # 2. Vidage de la mémoire GPU/CPU
+        if hasattr(self, 'translation_model'):
+            del self.translation_model
+            del self.tokenizer
+            torch.cuda.empty_cache()
+        
+        # 3. Rechargement forcé depuis Hugging Face
+        self.translation_model = AutoModelForSeq2SeqLM.from_pretrained(
+            model_name,
+            force_download=force_download,
+            resume_download=False,
+            local_files_only=False
+        )
+        
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            force_download=force_download,
+            resume_download=False,
+            local_files_only=False
+        )
+        
+        self._is_model_loaded = True
+    #    self.logger.info("Modèle rechargé depuis Hugging Face")
+
+
     def _load_language_support_config(self) -> dict:
         """
         Charge la configuration des langues supportées depuis un fichier JSON.
@@ -107,7 +144,8 @@ class NLLBTranslationService:
                 tgt_lang=target_language,
                 batch_size=int(os.getenv('BATCH_SIZE', 8)),
                 num_beams=int(os.getenv('NUM_BEAMS', 2)),
-                early_stopping=True
+                early_stopping=True,
+                clean_up_tokenization_spaces=True
             )
             
             return [result['translation_text'] for result in translations]
@@ -130,7 +168,7 @@ class NLLBTranslationService:
         Args:
             text: Texte à traduire
             target_language: Code langue cible
-            source_language: Code langue source (optionnel)
+            source_language: Code langue source
             
         Returns:
             Texte traduit
@@ -138,6 +176,8 @@ class NLLBTranslationService:
         Raises:
             RuntimeError: Si la traduction échoue
         """
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
         if not self._is_model_loaded:
             self.initialize_translation_model()
 
@@ -164,7 +204,7 @@ class NLLBTranslationService:
                 max_length=int(os.getenv('MAX_LENGTH', 1024))
             )
 
-            return self.tokenizer.decode(translated_tokens[0], skip_special_tokens=True)
+            return self.tokenizer.decode(translated_tokens[0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
 
         except Exception as error:
             raise RuntimeError(f"Erreur de traduction: {str(error)}")

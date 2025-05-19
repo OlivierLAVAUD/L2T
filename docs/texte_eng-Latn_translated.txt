@@ -1,0 +1,44 @@
+The following text is designed to test a translation application and contains various phrases with different levels of complexity, idiomatic expressions, multiple verbal times and technical and current vocabulary:
+
+Test text for translation applications 
+
+Simple phrases 
+
+The cat sleeps on the couch. She eats a green apple. It's nice today.
+
+Language expressions 
+
+He broke his pipe after a long illness. (idiom for "he died") She spent the night burning midnight oil. (late work)
+
+If I'd known, I'd have come earlier, and we'd have finished the project if the client had validated the models.
+
+Technical/scientific vocabulary 
+
+LDNA polymerase catalyzes the replication of lDNA during mitosis. The GPT-4 model uses a network of transforming neurons to generate text. 
+
+Denial and questioning 
+
+Why did you not answer the messenger? I do not know if it will come, for it has not confirmed.
+
+Literary text (complex style) "The wind whispered through the branches of the trees, like a lament from another time.
+
+Ambigue words/multiple meanings 
+
+The desk is made of wood. (Furniture) vs. He's sitting at the desk. (Working place) She lost her watch. (Dreaming) vs. Team lost the game. (Failing)
+
+Numbers and dates 
+
+3.14 is an approximation of π. The French Revolution began in 1789. 
+
+Informal dialogue 
+
+ Have you seen this movie?  Yeah, too cool!   I can't, I have a pool.  (Ironic expression for "I'm busy") 
+
+Metaphor/poetry "The moon was a silver dagger in the field of stars". 
+
+Objectives of the test: 
+
+Check the accuracy of verbal timing, identify the management of idiomatic expressions, assess the context understanding for ambiguous words. 
+Testing the fluidity of literary turns. 
+
+This text covers a wide range of language challenges.You can adapt it by adding terms specific to your field (juridical, medical, etc.).

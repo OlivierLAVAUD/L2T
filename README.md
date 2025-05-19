@@ -196,30 +196,29 @@ Run a simple command to verify that L2T is functioning correctly:
 
 # Usage
 
-1. Translate a text string to French:
+1. Translate a English text string to French:
     ```bash
-    l2t "Text to translate" -t fra_Latn
+    l2t "Text to translate" -t fra_Latn -s eng_Latn
     ```
 
-2. Translate a text string from French to English and specifying source language:
-    ```bash
-    l2t "Texte à traduire" -t eng_Latn -s fra_Latn
-    ```
-
-3. Translate a file and save the output on a specific name:
-    ```bash
-    l2t "Texte à traduire" -t eng_Latn -s fra_Latn -o my_translated_file.txt
-    ```
-
-4. Translate a PDF ou TXT document from CLI with a automatic filename extension (T2L.txt) recording:
+2. Translate a PDF ou TXT document from CLI with a automatic filename extension (T2L.txt) recording:
     ```bash
     l2t -f docs/book.txt -t eng_Latn -s fra_Latn
     l2t -f docs/book.pdf -l eng_Latn -s fra_Latn
     ```
-5. For more details see manual
+
+3. Translate a file and save the output on a specific filename:
+    ```bash
+    l2t "Texte à traduire" -t eng_Latn -s fra_Latn -o my_translated_file.txt
+    ```
+
+5. For more details about commands, see manual
     ```bash
     l2t --help
     ```
+
+Note: Specifying source language is mandatory.
+
 # Documentation
 
 [https://deepwiki.com/OlivierLAVAUD/L2T](https://deepwiki.com/OlivierLAVAUD/L2T)
